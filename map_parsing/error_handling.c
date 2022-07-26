@@ -11,6 +11,12 @@
 /* ************************************************************************** */
 #include "parsing.h"
 
+void	checks_free(t_game_data *st)
+{
+	mlx_destroy_display(st->init_ptr);
+	free(st->init_ptr);
+}
+
 int	is_map_valid(t_game_data *st, int height)
 {
 	int	valid;
@@ -19,6 +25,7 @@ int	is_map_valid(t_game_data *st, int height)
 	if (!st->map)
 	{
 		ft_printf("Error\nmap allocation failed\n");
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 	if (check_outer_walls(st->map, height))
@@ -29,38 +36,36 @@ int	is_map_valid(t_game_data *st, int height)
 						valid = 1;
 	if (!valid)
 	{
-		free_map(st);
 		ft_printf("Error\ninvalid map format\n");
+		free_map(st);
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 	return (1);
 }
 
-void	basic_checks(int ac, char **av, int *fd, int *height)
+void	basic_checks(t_game_data *st, char **av, int *fd, int *height)
 {
 	*fd = open(av[1], O_RDONLY);
 	*height = get_map_height(*fd);
-	if (ac < 2)
-	{
-		ft_printf("Error\nno file given\n");
-		close(*fd);
-		exit(EXIT_SUCCESS);
-	}
-	else if (*fd < 0)
+	if (*fd < 0)
 	{
 		ft_printf("Error\ncouldnt open the given map argument\n");
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 	else if (!check_extension(av[1]))
 	{
 		ft_printf("Error\nwrong file extension\n");
 		close(*fd);
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 	else if (*height < 3)
 	{
 		ft_printf("Error\nmap too small\n");
 		close(*fd);
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -72,6 +77,7 @@ void	sprite_handler(t_game_data *st, int fd)
 	{
 		ft_printf("Error\ncouldnt load sprites\n");
 		close(fd);
+		checks_free(st);
 		exit(EXIT_SUCCESS);
 	}
 }
@@ -86,9 +92,15 @@ void	init_handler(t_game_data *st, int ac, char **av)
 		ft_printf("Error\nmlx_init failed\n");
 		exit(EXIT_SUCCESS);
 	}
-	basic_checks(ac, av, &fd, &height);
-	sprite_handler(st, fd);
+	if (ac < 2)
+	{
+		ft_printf("Error\nno file given\n");
+		checks_free(st);
+		exit(EXIT_SUCCESS);
+	}
+	basic_checks(st, av, &fd, &height);
 	st->map = parse_map_content(av[1], fd, height);
 	is_map_valid(st, height);
+	sprite_handler(st, fd);
 	struct_init(st, height);
 }

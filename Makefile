@@ -29,7 +29,6 @@ LDFLAGS = -Lminilibx -Iminilibx -lmlx_Linux -lX11 -lXext
 
 NAME = so_long 
 
-all: $(NAME)
 	
 $(NAME): $(OBJS)
 	@$(MAKE) -C $(PRINTF_DIR)
@@ -39,14 +38,15 @@ $(NAME): $(OBJS)
 $(OBJS): $(SRC_FILES)
 	gcc $(CFLAGS) -c $(SRC_FILES) -I$(MLX_DIR)
 
-clean:
-	rm -f $(OBJS)
-	$(MAKE) -C $(PRINTF_DIR) clean
-	$(MAKE) -C $(MLX_DIR) clean
+all: $(NAME)
 
 fclean: clean
 	rm -f $(NAME)
 	$(MAKE) -C $(PRINTF_DIR) fclean
-	$(MAKE) -C $(MLX_DIR) fclean
+
+clean:
+	rm -f $(OBJS)
+	$(MAKE) -C $(PRINTF_DIR) clean
+	$(MAKE) -C $(MLX_DIR) clean
 
 re: fclean all
