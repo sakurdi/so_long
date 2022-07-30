@@ -26,7 +26,7 @@ int	is_map_valid(t_game_data *st, int height)
 	{
 		ft_printf("Error\nmap allocation failed\n");
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	if (check_outer_walls(st->map, height))
 		if (is_map_rectangular(st->map))
@@ -39,7 +39,7 @@ int	is_map_valid(t_game_data *st, int height)
 		ft_printf("Error\ninvalid map format\n");
 		free_map(st);
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	return (1);
 }
@@ -52,21 +52,21 @@ void	basic_checks(t_game_data *st, char **av, int *fd, int *height)
 	{
 		ft_printf("Error\ncouldnt open the given map argument\n");
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else if (!check_extension(av[1]))
 	{
 		ft_printf("Error\nwrong file extension\n");
 		close(*fd);
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	else if (*height < 3)
 	{
 		ft_printf("Error\nmap too small\n");
 		close(*fd);
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -78,7 +78,7 @@ void	sprite_handler(t_game_data *st, int fd)
 		ft_printf("Error\ncouldnt load sprites\n");
 		close(fd);
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 }
 
@@ -90,13 +90,13 @@ void	init_handler(t_game_data *st, int ac, char **av)
 	if (st->init_ptr == NULL)
 	{
 		ft_printf("Error\nmlx_init failed\n");
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	if (ac < 2)
 	{
 		ft_printf("Error\nno file given\n");
 		checks_free(st);
-		exit(EXIT_SUCCESS);
+		exit(EXIT_FAILURE);
 	}
 	basic_checks(st, av, &fd, &height);
 	st->map = parse_map_content(av[1], fd, height);
