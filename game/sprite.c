@@ -45,28 +45,18 @@ void	load_sprites(t_game_data *st)
 			&st->textures->item_h);
 }
 
-void	free_sprites(t_game_data *st, int n)
+void	free_sprites(t_game_data *st)
 {
-	if (n == 1)
+	if (st->textures->floor != NULL)
 		mlx_destroy_image(st->init_ptr, st->textures->floor);
-	else if (n == 2)
-	{
-		mlx_destroy_image(st->init_ptr, st->textures->floor);
+	if (st->textures->wall != NULL)
 		mlx_destroy_image(st->init_ptr, st->textures->wall);
-	}
-	else if (n == 3)
-	{
-		mlx_destroy_image(st->init_ptr, st->textures->floor);
-		mlx_destroy_image(st->init_ptr, st->textures->wall);
+	if (st->textures->exit != NULL)
 		mlx_destroy_image(st->init_ptr, st->textures->exit);
-	}
-	else if (n == 4)
-	{
-		mlx_destroy_image(st->init_ptr, st->textures->floor);
-		mlx_destroy_image(st->init_ptr, st->textures->wall);
-		mlx_destroy_image(st->init_ptr, st->textures->exit);
+	if (st->textures->item != NULL)
 		mlx_destroy_image(st->init_ptr, st->textures->item);
-	}
+	if (st->textures->player != NULL)
+		mlx_destroy_image(st->init_ptr, st->textures->player);
 }
 
 int	check_sprites(t_game_data *st)
@@ -74,24 +64,12 @@ int	check_sprites(t_game_data *st)
 	if (!st->textures->floor)
 		return (0);
 	else if (!st->textures->wall)
-	{	
-		free_sprites(st, 1);
 		return (0);
-	}
 	else if (!st->textures->exit)
-	{
-		free_sprites(st, 2);
 		return (0);
-	}
 	else if (!st->textures->item)
-	{	
-		free_sprites(st, 3);
 		return (0);
-	}
 	else if (!st->textures->player)
-	{
-		free_sprites(st, 4);
 		return (0);
-	}
 	return (1);
 }

@@ -72,11 +72,18 @@ void	basic_checks(t_game_data *st, char **av, int *fd, int *height)
 
 void	sprite_handler(t_game_data *st, int fd)
 {
+	st->textures->floor = NULL;
+	st->textures->wall = NULL;
+	st->textures->player = NULL;
+	st->textures->item = NULL;
+	st->textures->exit = NULL;
 	load_sprites(st);
 	if (!check_sprites(st))
 	{
 		ft_printf("Error\ncouldnt load sprites\n");
 		close(fd);
+		free_sprites(st);
+		free_map(st);
 		checks_free(st);
 		exit(EXIT_FAILURE);
 	}

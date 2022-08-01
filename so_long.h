@@ -96,6 +96,6 @@ void	sprite_handler(t_game_data *st, int fd);
 void	load_sprites(t_game_data *st);
 void	struct_init(t_game_data *st, int height);
 void	free_map(t_game_data *st);
-void	free_sprites(t_game_data *st, int n);
+void	free_sprites(t_game_data *st);
 
 #endif
